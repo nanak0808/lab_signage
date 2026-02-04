@@ -1,0 +1,99 @@
+/* 全体リセット */
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  overflow: hidden; /* スクロールバー消去 */
+  background-color: #000;
+}
+
+/* メインコンテナ */
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: background-color 0.5s ease; /* 背景色の変化をヌルっとさせる */
+}
+
+.content {
+  z-index: 10;
+  text-align: center;
+}
+
+/* メインテキスト（実験中など） */
+.main-text {
+  font-size: 12vw; /* 画面幅に合わせて巨大化 */
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.5s ease;
+  text-shadow: 0 0 20px currentColor; /* 発光エフェクト */
+}
+
+/* サブ情報（時計など） */
+.sub-info {
+  margin-top: 2rem;
+  font-size: 3vw;
+  font-weight: bold;
+  color: #fff;
+  opacity: 0.8;
+}
+
+/* --- ステータスごとの色定義 --- */
+
+/* 実験中：赤 + 警告っぽい点滅 */
+.status-experiment {
+  background: radial-gradient(circle, #330000 0%, #000000 90%);
+  color: #ff3333;
+}
+.status-experiment .main-text {
+  animation: pulse-red 2s infinite;
+}
+
+/* 会議中：クールな青 */
+.status-meeting {
+  background: radial-gradient(circle, #001133 0%, #000000 90%);
+  color: #00ccff;
+}
+
+/* ゼミ中：オレンジ */
+.status-seminar {
+  background: radial-gradient(circle, #331a00 0%, #000000 90%);
+  color: #ffaa00;
+}
+
+/* 空き：平和な緑 */
+.status-free {
+  background: radial-gradient(circle, #003300 0%, #000000 90%);
+  color: #33ff33;
+}
+
+/* 読み込み中/エラー：グレー */
+.status-loading {
+  background-color: #111;
+  color: #666;
+}
+
+/* アニメーション定義 */
+@keyframes pulse-red {
+  0% {
+    text-shadow: 0 0 20px #ff3333;
+    opacity: 1;
+  }
+  50% {
+    text-shadow: 0 0 50px #ff0000;
+    opacity: 0.8;
+  }
+  100% {
+    text-shadow: 0 0 20px #ff3333;
+    opacity: 1;
+  }
+}
