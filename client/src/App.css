@@ -27,26 +27,6 @@ body {
   text-align: center;
 }
 
-/* メインテキスト（実験中など） */
-.main-text {
-  font-size: 12vw; /* 画面幅に合わせて巨大化 */
-  font-weight: 900;
-  margin: 0;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition: all 0.5s ease;
-  text-shadow: 0 0 20px currentColor; /* 発光エフェクト */
-}
-
-/* サブ情報（時計など） */
-.sub-info {
-  margin-top: 2rem;
-  font-size: 3vw;
-  font-weight: bold;
-  color: #fff;
-  opacity: 0.8;
-}
-
 /* --- ステータスごとの色定義 --- */
 
 /* 実験中：赤 + 警告っぽい点滅 */

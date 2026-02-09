@@ -18,7 +18,7 @@ def get_status():
         
         # もしGAS側で空き時間の処理が甘くても、ここで安全策をとる
         if not data:
-            return jsonify({"status": "free", "start_time": None})
+            return jsonify({"status": "free", "start_time": None, "end_time": None})
             
         return jsonify(data)
     except Exception as e:

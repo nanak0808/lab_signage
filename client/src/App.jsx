@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import MainText from "./components/mainText.jsx";
+import SubInfo from "./components/subInfo.jsx";
 
 function App() {
   const [data, setData] = useState({ status: "loading", start_time: null });
@@ -30,10 +32,6 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // --- 表示内容の決定 ---
-  const formatTime = (date) =>
-    date.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
-
   // ステータスに応じた表示テキストとクラス名
   let displayStatus = "";
   let statusClass = "";
@@ -63,20 +61,9 @@ function App() {
 
   return (
     <div className={`container ${statusClass}`}>
-      {/* 背景のエフェクト（オプション） */}
-      <div className="overlay"></div>
-
       <div className="content">
-        <h1 className="main-text">{displayStatus}</h1>
-
-        <div className="sub-info">
-          <p className="clock">{formatTime(currentTime)}</p>
-          {data.start_time && data.start_time !== "none" && (
-            <p className="schedule-time">
-              Plan: {data.start_time} - {data.end_time}
-            </p>
-          )}
-        </div>
+        <MainText displayStatus={displayStatus} />
+        <SubInfo currentTime={currentTime} data={data} />
       </div>
     </div>
   );

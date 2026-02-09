@@ -1,5 +1,10 @@
+@font-face {
+  font-family: "PixelMplus";
+  src: url("/fonts/PixelMplus12-Bold.ttf") format("truetype");
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "PixelMplus", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -11,6 +16,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --main-font: "PixelMplus", sans-serif;
 }
 
 a {
@@ -28,6 +35,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: var(--main-font);
+  /* -webkit-font-smoothing: none; */
 }
 
 h1 {
