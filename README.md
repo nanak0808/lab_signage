@@ -18,7 +18,8 @@ npm create vite@latest client -- --template react
 ```
 npm install @emotion/styled @emotion/react
 ```
-※今回はEmotion (Styled Components記法)を使用
+※今回はEmotion (Styled Components記法)を使用  
+公式ドキュメント：https://emotion.sh/docs/styled
 
 ## 自分用メモ
 - Flaskとは？
