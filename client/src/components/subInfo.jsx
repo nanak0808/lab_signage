@@ -1,18 +1,22 @@
-import "../css/subInfo.css";
+import styled from "@emotion/styled";
 
-const formatTime = (date) =>
-  date.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+const StyledSubInfo = styled.div`
+  margin-top: -1rem;
+  font-size: 3.5vw;
+  font-weight: bold;
+  color: #ffffff;
+  opacity: 0.8;
+`;
 
-function SubInfo({ currentTime, data }) {
+function SubInfo({ data, category }) {
   return (
-    <div className="sub-info">
-      <p className="clock">{formatTime(currentTime)}</p>
+    <StyledSubInfo>
       {data.start_time && data.start_time !== "none" && (
         <p className="schedule-time">
-          Plan: {data.start_time} - {data.end_time}
+          {category}: {data.start_time} - {data.end_time}
         </p>
       )}
-    </div>
+    </StyledSubInfo>
   );
 }
 

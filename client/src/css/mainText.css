@@ -1,9 +1,0 @@
-.main-text {
-  font-size: 12vw; /* 画面幅に合わせて巨大化 */
-  font-weight: 900;
-  margin: 0;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition: all 0.5s ease;
-  text-shadow: 0 0 20px currentColor; /* 発光エフェクト */
-}
