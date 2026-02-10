@@ -15,6 +15,10 @@ pip install flask flask-cors requests
 ```
 npm create vite@latest client -- --template react
 ```
+```
+npm install @emotion/styled @emotion/react
+```
+※今回はEmotion (Styled Components記法)を使用
 
 ## 自分用メモ
 - Flaskとは？
