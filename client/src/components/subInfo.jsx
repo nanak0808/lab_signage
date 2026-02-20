@@ -11,10 +11,12 @@ const StyledSubInfo = styled.div`
 function SubInfo({ data, category }) {
   return (
     <StyledSubInfo>
-      {data.start_time && data.start_time !== "none" && (
+      {data.start_time && data.start_time !== "none" ? (
         <p className="schedule-time">
           {category}: {data.start_time} - {data.end_time}
         </p>
+      ) : (
+        <p className="schedule-time">NOW VACANT</p>
       )}
     </StyledSubInfo>
   );
