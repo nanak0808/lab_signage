@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
 
 const StyledClock = styled.p`
-  font-size: 3vw;
+  position: absolute;
+  top: 70px;
+  right: 90px;
+  font-size: 4vw;
   font-weight: bold;
   color: #ffffff;
   opacity: 0.8;
+  margin: 0;
 `;
 
 const formatTime = (date) =>

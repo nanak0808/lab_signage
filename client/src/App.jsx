@@ -4,8 +4,8 @@ import SubInfo from "./components/subInfo.jsx";
 import Header from "./components/header.jsx";
 import { updateStatus } from "./hooks/updateStatus.js";
 import { getStatusInfo } from "./utils/statusHelpers.js";
-// 背景に使用するGIF画像
-import characterGif from "../public/gifs/wink.gif";
+import characterGif from "./gifs/wink.gif";
+import frameSVG from "./images/block_koori.svg";
 
 const Container = styled.div`
   width: 100vw;
@@ -63,8 +63,8 @@ const BgGif = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover; /* アスペクト比を維持したまま画面を埋め尽くす */
-  opacity: 0.15; /* ★ここ重要！ 透明度調整（0.1〜0.3くらいがおすすめ） */
-  z-index: 1; /* グラデーションと網目の間 */
+  opacity: 0.15;
+  z-index: 1;
   pointer-events: none;
   image-rendering: pixelated; /* ドット絵をくっきりさせる */
 `;
@@ -75,12 +75,41 @@ const Content = styled.div`
   text-align: center;
 `;
 
-// 右下のGIF用（今回は不要なので削除してもOKですが残しておきます）
+const PixelFrame = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 2px;
+  right: 2px;
+  bottom: 0px;
+  pointer-events: none;
+  z-index: 100;
+
+  /* 1. まずは枠全体にブロック画像をタイル状に敷き詰める */
+  background-image: url(${frameSVG});
+  background-repeat: repeat;
+  background-size: 60.6px 60px; /* ブロック1個のサイズ（＝枠の太さ） */
+  image-rendering: pixelated;
+
+  /* 2. ここからが魔法のCSS：中央部分を綺麗にくり抜いて透明にする */
+  border: 60px solid transparent; /* くり抜きたい枠の太さを指定 */
+
+  /* マスク機能を使って、borderの部分「以外」を透明化する */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+`;
+
 const GifImage = styled.img`
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 150px;
+  left: 4%;
+  bottom: -110px;
+  width: 500px;
   height: auto;
   z-index: 10;
 `;
@@ -91,17 +120,15 @@ function App() {
 
   return (
     <Container status={data.status}>
-      {/* ★ここに背景GIFを追加 */}
-      <BgGif src={characterGif} alt="" />
-
+      {/* <BgGif src={characterGif} alt="" /> */}
+      <Header currentTime={currentTime} />
       <Content className={className}>
-        <Header currentTime={currentTime} />
         <MainText displayStatus={text} status={data.status} />
         <SubInfo data={data} category={category} />
       </Content>
 
-      {/* 右下のGIFは一旦コメントアウトのまま */}
-      {/* <GifImage src={characterGif} alt="Character" /> */}
+      <PixelFrame />
+      <GifImage src={characterGif} alt="Character" />
     </Container>
   );
 }
