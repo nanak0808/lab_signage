@@ -16,7 +16,7 @@ const StyledMainText = styled.h1`
   transition: all 0.5s ease;
   text-shadow: 0 0 20px currentColor;
 
-  color: ${(props) => {
+  ${(props) => {
     switch (props.status) {
       case "experiment":
         return `
@@ -24,13 +24,13 @@ const StyledMainText = styled.h1`
         animation: ${pulseRed} 2s infinite;
         `;
       case "meeting":
-        return "#00ccff";
+        return `color: #00ccff;`;
       case "seminar":
-        return "#ffaa00";
+        return `color: #ffaa00;`;
       case "free":
-        return "#33ff33";
+        return `color: #33ff33;`;
       default:
-        return "#ffffff";
+        return `color: #ffffff;`;
     }
   }};
 `;
