@@ -9,6 +9,7 @@ const StyledClock = styled.p`
   color: #ffffff;
   opacity: 0.8;
   margin: 0;
+  z-index: 10;
 `;
 
 const formatTime = (date) =>
