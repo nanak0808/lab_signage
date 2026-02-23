@@ -7,7 +7,7 @@ import { updateStatus } from "./hooks/updateStatus.js";
 import { getStatusInfo } from "./utils/statusHelpers.js";
 import frameSVG from "./images/block_koori.svg";
 import walkingGif from "./gifs/walking.gif";
-import runnningGif from "./gifs/running.gif";
+import runningGif from "./gifs/running.gif";
 
 const Container = styled.div`
   width: 100vw;
@@ -135,7 +135,7 @@ function App() {
         />
       ) : (
         <RunningCharacter
-          src={runnningGif}
+          src={runningGif}
           alt="Running Character"
           duration="15s"
         />
