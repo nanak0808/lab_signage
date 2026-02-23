@@ -1,5 +1,4 @@
 const GAS_API_URL = "http://localhost:5000/api/status";
-// const WEATHER_API_URL = "http://localhost:5000/api/weather";
 
 export const fetchGasStatus = async () => {
   try {
@@ -12,4 +11,18 @@ export const fetchGasStatus = async () => {
   }
 };
 
-// 天気情報を取得する関数を記述
+export const fetchWeather = async () => {
+  try {
+    const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=Kyoto,jp&units=metric&lang=ja&appid=${apiKey}`;
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("天気の取得に失敗しました");
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Weather API Error:", error);
+    throw error;
+  }
+};

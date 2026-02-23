@@ -10,7 +10,7 @@ const StyledClock = styled.p`
   color: #ffffff;
   opacity: 0.8;
   margin: 0;
-  z-index: 10;
+  z-index: 100;
 `;
 
 const formatTime = (date) =>
