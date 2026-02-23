@@ -10,8 +10,6 @@ app = Flask(__name__)
 # React(ポート5173等)からFlask(ポート5000)へのアクセスを許可する
 CORS(app)
 
-
-
 # GAS URL
 GAS_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLgEsz5ybjWjeSbuKn83j_ky-vRxVjUTNxrkiU5q6aYijIEKIZA_tQkdIkQzwuVqvcNGIaBBdNUArG-Td2rX1tMAo_lKViF-VDwpP3Wsa52yKmR4lHhRCdh8j8pDLSB2V8BJKtH6j0jpXsywas6XJFs8TaH0Vn1G1dlM_I407jbHuYTQ3PZ3dGBjciI_J0VNcLK817EO7-V3qygsUoun0f4XSZkDwaKdUGI-LVK5QwajE0nhQSc1E_Sr4Kpz7oxJwnSuXGy9-vgreJ9_RAoZXoF4_pK8Qe5KzMMVtO4w&lib=MDUFyeJDjWL4JFu1sJhyBNy15I613relY" 
 
