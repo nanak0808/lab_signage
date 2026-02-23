@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import Weather from "./weather.jsx";
 
 const StyledClock = styled.p`
   position: absolute;
@@ -9,7 +10,7 @@ const StyledClock = styled.p`
   color: #ffffff;
   opacity: 0.8;
   margin: 0;
-  z-index: 10;
+  z-index: 100;
 `;
 
 const formatTime = (date) =>
@@ -19,6 +20,7 @@ function Header({ currentTime }) {
   return (
     <div>
       <StyledClock>{formatTime(currentTime)}</StyledClock>
+      <Weather />
     </div>
   );
 }
