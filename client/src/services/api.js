@@ -1,9 +1,13 @@
 const GAS_API_URL = "http://localhost:5000/api/status";
+const WEATHER_API_URL = "http://localhost:5000/api/weather";
 
 export const fetchGasStatus = async () => {
   try {
     const response = await fetch(GAS_API_URL);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok)
+      throw new Error(
+        `Googleカレンダー情報の取得に失敗しました(status: ${response.status})`,
+      );
     return await response.json();
   } catch (error) {
     console.error("Error fetching status:", error);
@@ -13,14 +17,10 @@ export const fetchGasStatus = async () => {
 
 export const fetchWeather = async () => {
   try {
-    const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=Kyoto,jp&units=metric&lang=ja&appid=${apiKey}`;
-
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("天気の取得に失敗しました");
-
-    const data = await response.json();
-    return data;
+    const response = await fetch(WEATHER_API_URL);
+    if (!response.ok)
+      throw new Error(`天気の取得に失敗しました(status: ${response.status})`);
+    return await response.json();
   } catch (error) {
     console.error("Weather API Error:", error);
     throw error;
