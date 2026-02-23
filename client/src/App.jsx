@@ -1,11 +1,13 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import MainText from "./components/mainText.jsx";
 import SubInfo from "./components/subInfo.jsx";
 import Header from "./components/header.jsx";
 import { updateStatus } from "./hooks/updateStatus.js";
 import { getStatusInfo } from "./utils/statusHelpers.js";
-import characterGif from "./gifs/wink.gif";
 import frameSVG from "./images/block_koori.svg";
+import walkingGif from "./gifs/walking.gif";
+import runningGif from "./gifs/running.gif";
 
 const Container = styled.div`
   width: 100vw;
@@ -18,7 +20,6 @@ const Container = styled.div`
   position: relative;
   overflow: hidden; /* 背景からはみ出した部分を隠す */
 
-  /* レイヤー1（一番奥）: ステータスごとのグラデーションのみここに残す */
   background: ${(props) => {
     switch (props.status) {
       case "experiment":
@@ -36,7 +37,6 @@ const Container = styled.div`
   /* background-sizeはグラデーション用のみ残す */
   background-size: 100% 100%;
 
-  /* レイヤー3（手前）: ドット風の網目を::afterで上に被せる */
   &::after {
     content: "";
     position: absolute;
@@ -53,20 +53,6 @@ const Container = styled.div`
       8px 8px,
       8px 8px;
   }
-`;
-
-/* レイヤー2（中間）: 背景全体に広げるGIF用のスタイル */
-const BgGif = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* アスペクト比を維持したまま画面を埋め尽くす */
-  opacity: 0.15;
-  z-index: 1;
-  pointer-events: none;
-  image-rendering: pixelated; /* ドット絵をくっきりさせる */
 `;
 
 const Content = styled.div`
@@ -105,13 +91,27 @@ const PixelFrame = styled.div`
   mask-composite: exclude;
 `;
 
-const GifImage = styled.img`
+const runAcrossScreen = keyframes`
+  0% {
+    transform: translateX(-150px);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+`;
+
+const RunningCharacter = styled.img`
   position: absolute;
-  left: 4%;
-  bottom: -110px;
-  width: 500px;
+  bottom: 30px;
+  left: 0;
+  width: 250px;
   height: auto;
-  z-index: 10;
+  z-index: 15;
+
+  image-rendering: pixelated;
+  pointer-events: none;
+
+  animation: ${runAcrossScreen} ${(props) => props.duration} linear infinite;
 `;
 
 function App() {
@@ -120,7 +120,6 @@ function App() {
 
   return (
     <Container status={data.status}>
-      {/* <BgGif src={characterGif} alt="" /> */}
       <Header currentTime={currentTime} />
       <Content className={className}>
         <MainText displayStatus={text} status={data.status} />
@@ -128,7 +127,19 @@ function App() {
       </Content>
 
       <PixelFrame />
-      <GifImage src={characterGif} alt="Character" />
+      {data.status === "free" ? (
+        <RunningCharacter
+          src={walkingGif}
+          alt="Walking Character"
+          duration="30s"
+        />
+      ) : (
+        <RunningCharacter
+          src={runningGif}
+          alt="Running Character"
+          duration="15s"
+        />
+      )}
     </Container>
   );
 }
