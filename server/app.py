@@ -1,6 +1,7 @@
 #app.pyでは２つのプログラムを同時に動かしている．
 #Flaskサーバ：React（ブラウザ）からの要求を待っており，要求があればデータを送信する．
 #ボタン監視スレッド：Flaskとは無関係にボタン入力の有無を監視し，押されたら変数を書き換える．
+import os
 
 #Flaskサーバ用
 from flask import Flask, jsonify
