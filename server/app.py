@@ -122,6 +122,32 @@ def get_status():             #React側から現在のカレンダー情報を�
         print(f"Error: {e}")
         return jsonify({"status": "error"}) #React側に送る専用のエラーメッセージ
 
+@app.route('/api/weather', methods=['GET'])
+def get_weather():
+    # .env からURLとAPIキーを安全に取得
+    api_key = os.getenv("OPENWEATHER_API_KEY")
+    base_url = os.getenv("OPENWEATHER_BASE_URL")
+    
+    # URLにくっつけるパラメータ（京都の指定など）
+    params = {
+        "q": "Kyoto,jp",
+        "units": "metric",
+        "lang": "ja",
+        "appid": api_key
+    }
+    
+    try:
+        # Flaskが身代わりになってOpenWeatherにリクエストを送る
+        response = requests.get(base_url, params=params)
+        response.raise_for_status() # エラーがあれば例外を投げる
+        
+        # 取得した天気データをそのままReactに返す
+        return jsonify(response.json())
+        
+    except requests.exceptions.RequestException as e:
+        print("Weather API Error:", e)
+        return jsonify({"error": "天気の取得に失敗しました"}), 500
+
 #おまじない．python app.pyと打ち込んだ時だけpaa.runが実行される．
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False) 
