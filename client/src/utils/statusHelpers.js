@@ -14,6 +14,18 @@ export const getStatusInfo = (status) => {
         category: "ゼミ",
         className: "status-seminar",
       };
+    case "emergency_in_use":
+      return {
+        text: "使用中",
+        category: "emergency",
+        className: "status-emergency-in-use",
+      };
+    case "emergency_away":
+      return {
+        text: "不在中",
+        category: "emergency",
+        className: "status-emergency-away",
+      };
     case "free":
       return { text: "空き", category: null, className: "status-free" };
     default:

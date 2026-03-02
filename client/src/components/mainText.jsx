@@ -29,6 +29,10 @@ const StyledMainText = styled.h1`
         return `color: #ffaa00;`;
       case "free":
         return `color: #33ff33;`;
+      case "emergency_in_use":
+        return `color: #ff0000;`;
+      case "emergency_away":
+        return `color: #ff0000;`;
       default:
         return `color: #ffffff;`;
     }
