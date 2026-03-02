@@ -51,6 +51,8 @@ def watch_buttons():
     GPIO.setup(PIN_AWAY, GPIO.IN, pull_up_down=GPIO.PUD_UP) #緊急退席
     GPIO.setup(PIN_RESET, GPIO.IN, pull_up_down=GPIO.PUD_UP) # リセット機能
 
+    print("--- GPIO Watch Thread Started ---") # 起動確認用ログ
+
     while True:
         # ボタン23: 急遽使用中
         if GPIO.input(PIN_IN_USE) == GPIO.LOW:  #LOW：23Pinのボタンが押されている時
@@ -151,7 +153,7 @@ def get_weather():
 
 #おまじない．python app.pyと打ち込んだ時だけpaa.runが実行される．
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False) 
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False) 
     #0.0.0.0によってlocalhost以外からのアクセス（起動命令）も受付．
     #ポート：5000．React側の宛先と同一．
     #debug：スレッドを使う場合はF（スレッドが二重に起動してバグる可能性があるらしい．）
