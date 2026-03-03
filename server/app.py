@@ -97,12 +97,12 @@ def watch_buttons():
         time.sleep(0.1)
 
 # ↓ 開発中はこの処理をmain内で実行（開発終了後はこの位置でok）
-# if HAS_GPIO:
-#     #新しいスレッド（分身）を作って、watch_buttons（ボタン監視）という仕事を割り当てる
-#     #daemon=Tで，メイン（Flaskサーバ）が終了したらスレッド（ボタン監視）も一緒に終了．ボタン監視のゾンビ化防止．
-#     thread = threading.Thread(target=watch_buttons, daemon=True)
-#     #メインの処理とは別のラインで今すぐ実行スタート．
-#     thread.start()
+if HAS_GPIO:
+    #新しいスレッド（分身）を作って、watch_buttons（ボタン監視）という仕事を割り当てる
+    #daemon=Tで，メイン（Flaskサーバ）が終了したらスレッド（ボタン監視）も一緒に終了．ボタン監視のゾンビ化防止．
+    thread = threading.Thread(target=watch_buttons, daemon=True)
+    #メインの処理とは別のラインで今すぐ実行スタート．
+    thread.start()
 
 @slack_app.command("/ask")
 def handle_signage_command(ack, respond, command):
@@ -192,19 +192,12 @@ def get_weather():
 
 #おまじない．python app.pyと打ち込んだ時だけpaa.runが実行される．
 if __name__ == '__main__':
-    # ターミナルから直接実行された最初の1回（親プロセス）だけ、ここを通る
-    if HAS_GPIO:
-        print("--- GPIO Watch Thread Started ---")
-        gpio_thread = threading.Thread(target=watch_buttons, daemon=True)
-        gpio_thread.start()
-
     # SlackBotの起動
     print("--- Slack Bot Started ---")
     slack_handler = SocketModeHandler(slack_app, os.getenv("SLACK_APP_TOKEN"))
     slack_handler.connect()
 
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False) 
-    # app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False) 
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False) 
     #0.0.0.0によってlocalhost以外からのアクセス（起動命令）も受付．
     #ポート：5000．React側の宛先と同一．
     #debug：スレッドを使う場合はF（スレッドが二重に起動してバグる可能性があるらしい．）
