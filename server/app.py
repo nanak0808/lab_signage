@@ -1,7 +1,12 @@
 #app.pyでは２つのプログラムを同時に動かしている．
-#Flaskサーバ：React（ブラウザ）からの要求を待っており，要求があればデータを送信する．
+#Flaskサーバ：React（ブラウザ）からの要求を待っており，要求があればデータを送信する
 #ボタン監視スレッド：Flaskとは無関係にボタン入力の有無を監視し，押されたら変数を書き換える．
 import os
+from dotenv import load_dotenv
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+env_path = os.path.join(basedir, '.env')
+load_dotenv(env_path)
 
 #Flaskサーバ用
 from flask import Flask, jsonify
@@ -14,6 +19,10 @@ import requests
 #                    (2)Flaskサーバを先に動かすとリクエスト待ちから抜け出せない（ボタン入力が反映されない）．
 import threading 
 import time
+
+# SlackBot用
+from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 #ラズパイ環境用 (Windows等でのエラー防止)
 #RPi.GPIOはラズベリーパイ専用ライブラリ．ラズパイでコードを実行するとインポートに成功してHAS_GPIOがT．
@@ -33,6 +42,9 @@ GAS_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=Aeh
 current_mode = 0
 last_button_time = None
 OVERRIDE_DURATION = 600  # 10分間
+
+# SlackBotを初期化
+slack_app = App(token=os.getenv("SLACK_BOT_TOKEN"))
 
 #ボタン入力を常に監視用
 #★ラズベリーパイでコードを実行している時（HAS_GPIOがTの時）だけ必要な処理★
@@ -84,12 +96,39 @@ def watch_buttons():
 
         time.sleep(0.1)
 
-if HAS_GPIO:
-    #新しいスレッド（分身）を作って、watch_buttons（ボタン監視）という仕事を割り当てる
-    #daemon=Tで，メイン（Flaskサーバ）が終了したらスレッド（ボタン監視）も一緒に終了．ボタン監視のゾンビ化防止．
-    thread = threading.Thread(target=watch_buttons, daemon=True)
-    #メインの処理とは別のラインで今すぐ実行スタート．
-    thread.start()
+# ↓ 開発中はこの処理をmain内で実行（開発終了後はこの位置でok）
+# if HAS_GPIO:
+#     #新しいスレッド（分身）を作って、watch_buttons（ボタン監視）という仕事を割り当てる
+#     #daemon=Tで，メイン（Flaskサーバ）が終了したらスレッド（ボタン監視）も一緒に終了．ボタン監視のゾンビ化防止．
+#     thread = threading.Thread(target=watch_buttons, daemon=True)
+#     #メインの処理とは別のラインで今すぐ実行スタート．
+#     thread.start()
+
+@slack_app.command("/ask")
+def handle_signage_command(ack, respond, command):
+    global current_mode, last_button_time
+    ack()  # コマンド受け取りの確認
+
+    text = command.get("text", "").strip().lower()
+
+    if text in ["away"]:
+        current_mode = 2
+        last_button_time = time.time()
+        respond("🏃 サイネージを「急遽不在中」に変更しました！(10分間)")
+        print("Slack Command: Set to Emergency Away")
+    elif text in ["use"]:
+        current_mode = 1
+        last_button_time = time.time()
+        respond("⚠️ サイネージを「急遽使用中」に変更しました！(10分間)")
+        print("Slack Command: Set to Emergency In-Use")
+    elif text in ["reset"]:
+        current_mode = 0
+        last_button_time = None
+        respond("✅ サイネージを通常モードにリセットしました！")
+        print("Slack Command: Reset to Normal Mode")
+    else:
+        respond("❌ コマンドが認識されませんでした。使用方法: `/ask away`, `/ask use`, `/ask reset`")
+        print("Slack Command: Unrecognized command")
 
 #直下のget status関数を「React（ブラウザ）からの要求に答える窓口」に変化させている．
 #/api/statusはFlaskサーバ内のアクセスすべきパス．これがないとReact側はサーバ内のどのプログラムが必要か分からない．
@@ -153,7 +192,19 @@ def get_weather():
 
 #おまじない．python app.pyと打ち込んだ時だけpaa.runが実行される．
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False) 
+    # ターミナルから直接実行された最初の1回（親プロセス）だけ、ここを通る
+    if HAS_GPIO:
+        print("--- GPIO Watch Thread Started ---")
+        gpio_thread = threading.Thread(target=watch_buttons, daemon=True)
+        gpio_thread.start()
+
+    # SlackBotの起動
+    print("--- Slack Bot Started ---")
+    slack_handler = SocketModeHandler(slack_app, os.getenv("SLACK_APP_TOKEN"))
+    slack_handler.connect()
+
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False) 
+    # app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False) 
     #0.0.0.0によってlocalhost以外からのアクセス（起動命令）も受付．
     #ポート：5000．React側の宛先と同一．
     #debug：スレッドを使う場合はF（スレッドが二重に起動してバグる可能性があるらしい．）

@@ -13,20 +13,19 @@ function SubInfo({ data, category }) {
     <StyledSubInfo>
       {category === null ? (
         <p className="schedule-time">NOW VACANT</p>
-      ) : category === "emergency" ? (
-        <p className="schedule-time">EMERGENCY MODE</p>
+      ) : category === "emergency_in_use" ? (
+        <p className="schedule-time">
+          一時的に使用中です．少しお待ちください．
+        </p>
+      ) : category === "emergency_away" ? (
+        <p className="schedule-time">
+          一時的に部屋を空けています．少しお待ちください．
+        </p>
       ) : (
         <p className="schedule-time">
           {category}: {data.start_time} - {data.end_time}
         </p>
       )}
-      {/* {category != null ? (
-        <p className="schedule-time">
-          {category}: {data.start_time} - {data.end_time}
-        </p>
-      ) : (
-        <p className="schedule-time">NOW VACANT</p>
-      )} */}
     </StyledSubInfo>
   );
 }

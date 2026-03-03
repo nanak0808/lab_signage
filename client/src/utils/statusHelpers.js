@@ -17,13 +17,13 @@ export const getStatusInfo = (status) => {
     case "emergency_in_use":
       return {
         text: "使用中",
-        category: "emergency",
+        category: "emergency_in_use",
         className: "status-emergency-in-use",
       };
     case "emergency_away":
       return {
         text: "不在中",
-        category: "emergency",
+        category: "emergency_away",
         className: "status-emergency-away",
       };
     case "free":
