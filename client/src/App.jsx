@@ -23,6 +23,8 @@ const Container = styled.div`
   background: ${(props) => {
     switch (props.status) {
       case "experiment":
+      case "emergency_in_use":
+      case "emergency_away":
         return "radial-gradient(circle, #7c2323 0%, #000000 100%)";
       case "meeting":
         return "radial-gradient(circle, #1a3977 0%, #000000 100%)";
